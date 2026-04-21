@@ -1,52 +1,33 @@
 const audio = document.getElementById("audio");
 const musicBtn = document.getElementById("musicBtn");
-const icon = musicBtn.querySelector("span");
 
-// الرابط الجديد المشفر (HTTPS) عشان يشتغل على Vercel
+// رابط مباشر وآمن (HTTPS)
 const stream = "https://backup.quran.com.kw/quraan";
 
 let playing = false;
-
 audio.src = stream;
-audio.volume = 0.8;
-audio.preload = "metadata";
 
-function playAudio() {
-    audio.play()
-    .then(() => {
-        playing = true;
-        icon.textContent = "🔊"; 
-        musicBtn.classList.add("playing");
-    })
-    .catch((error) => {
-        console.log("فشل التشغيل التلقائي، اضغط على الزر:");
-    });
-}
-
-function pauseAudio() {
-    audio.pause();
-    playing = false;
-    icon.textContent = "🔇"; 
-    musicBtn.classList.remove("playing");
-}
-
-musicBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
+function togglePlay() {
     if (playing) {
-        pauseAudio();
+        audio.pause();
+        musicBtn.innerHTML = "<span>🔇</span>";
+        playing = false;
     } else {
-        playAudio();
+        audio.play().then(() => {
+            playing = true;
+            musicBtn.innerHTML = "<span>🔊</span>";
+        }).catch(err => {
+            console.log("اضغط مرة تانية للتشغيل");
+        });
     }
-});
+}
 
-// تشغيل عند أول لمسة للشاشة عشان المتصفح يسمح بالصوت
+// تشغيل عند الضغط على الزرار
+musicBtn.addEventListener("click", togglePlay);
+
+// تشغيل احتياطي عند أول لمسة للشاشة (عشان المتصفح يسمح بالصوت)
 document.addEventListener("click", () => {
     if (!playing) {
-        playAudio();
+        togglePlay();
     }
 }, { once: true });
-
-audio.addEventListener("error", () => {
-    console.log("خطأ في البث");
-    pauseAudio();
-});
