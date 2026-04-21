@@ -6,34 +6,31 @@
     <title>Mohamed Mahmoud | Profile</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* كود لضمان ظهور الزرار وتفاعله */
+        /* تصميم الزرار ليكون واضح جداً وقابل للضغط */
         .music-btn {
             cursor: pointer;
             position: fixed;
             top: 20px;
             right: 20px;
             z-index: 1000;
-            font-size: 30px;
-            background: rgba(255,255,255,0.2);
-            padding: 10px;
-            border-radius: 50%;
-            transition: transform 0.2s, background 0.2s;
+            background: #28a745; /* لون أخضر عشان يبان إنه تشغيل */
+            color: white;
+            padding: 12px;
+            border-radius: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 50px;
-            height: 50px;
-        }
-        .music-btn:active {
-            transform: scale(0.9);
-            background: rgba(255,255,255,0.4);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-family: sans-serif;
+            font-weight: bold;
+            min-width: 100px;
         }
     </style>
 </head>
 <body>
 
     <div class="music-btn" id="musicBtn">
-        <span id="musicIcon">🔇</span>
+        <span id="statusText">تشغيل الإذاعة 🔊</span>
     </div>
 
     <div class="container">
@@ -54,29 +51,28 @@
         <footer>Mohamed Mahmoud 2026 ©</footer>
     </div>
 
-    <audio id="audio" src="https://stream.radiojar.com/8s5u5tpdtiduv" preload="none"></audio>
+    <audio id="audioPlayer">
+        <source src="https://n02.radiojar.com/8s5u5tpdtiduv?rj-ttl=5&rj-tok=AAABj_X" type="audio/mpeg">
+    </audio>
 
     <script>
-        const audio = document.getElementById("audio");
+        const audio = document.getElementById("audioPlayer");
         const musicBtn = document.getElementById("musicBtn");
-        const musicIcon = document.getElementById("musicIcon");
-        let isPlaying = false;
+        const statusText = document.getElementById("statusText");
 
-        // وظيفة التشغيل والإيقاف عند الضغط على الزرار فقط
         musicBtn.addEventListener("click", function() {
-            if (isPlaying) {
-                audio.pause();
-                musicIcon.textContent = "🔇";
-                isPlaying = false;
-            } else {
-                // بدأ التشغيل
+            if (audio.paused) {
+                // محاولة تشغيل الصوت
                 audio.play().then(() => {
-                    musicIcon.textContent = "🔊";
-                    isPlaying = true;
-                }).catch(error => {
-                    alert("عذراً، المتصفح يمنع التشغيل التلقائي. حاول الضغط مرة أخرى.");
-                    console.log("Error:", error);
+                    statusText.innerText = "إيقاف ⏸️";
+                    musicBtn.style.background = "#dc3545"; // أحمر عند الإيقاف
+                }).catch(err => {
+                    alert("برجاء الضغط مرة أخرى للتشغيل");
                 });
+            } else {
+                audio.pause();
+                statusText.innerText = "تشغيل 🔊";
+                musicBtn.style.background = "#28a745"; // أخضر عند التشغيل
             }
         });
     </script>
