@@ -5,14 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohamed Mahmoud | Profile</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* كود لضمان ظهور الزرار وتفاعله */
+        .music-btn {
+            cursor: pointer;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            font-size: 30px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 50%;
+            transition: transform 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+        }
+        .music-btn:active {
+            transform: scale(0.9);
+            background: rgba(255,255,255,0.4);
+        }
+    </style>
 </head>
 <body>
 
-    <!-- زر الصوت -->
-    <div class="music-btn" id="musicBtn"><span>🔇</span></div>
+    <div class="music-btn" id="musicBtn">
+        <span id="musicIcon">🔇</span>
+    </div>
 
     <div class="container">
-        <img src="https://i.postimg.cc/nVNvqCxd/54c7d667a257a66718129902a14b90b3-(1).jpg" class="profile-img">
+        <img src="https://i.postimg.cc/nVNvqCxd/54c7d667a257a66718129902a14b90b3-(1).jpg" alt="Mohamed Mahmoud" class="profile-img">
         
         <h1>Mohamed Mahmoud</h1>
         <p class="welcome-text">Welcome To My World</p>
@@ -29,10 +54,31 @@
         <footer>Mohamed Mahmoud 2026 ©</footer>
     </div>
 
-    <!-- الصوت -->
-    <audio id="audio"></audio>
+    <audio id="audio" src="https://stream.radiojar.com/8s5u5tpdtiduv" preload="none"></audio>
 
-    <!-- السكريبت -->
-    <script src="script.js"></script>
+    <script>
+        const audio = document.getElementById("audio");
+        const musicBtn = document.getElementById("musicBtn");
+        const musicIcon = document.getElementById("musicIcon");
+        let isPlaying = false;
+
+        // وظيفة التشغيل والإيقاف عند الضغط على الزرار فقط
+        musicBtn.addEventListener("click", function() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.textContent = "🔇";
+                isPlaying = false;
+            } else {
+                // بدأ التشغيل
+                audio.play().then(() => {
+                    musicIcon.textContent = "🔊";
+                    isPlaying = true;
+                }).catch(error => {
+                    alert("عذراً، المتصفح يمنع التشغيل التلقائي. حاول الضغط مرة أخرى.");
+                    console.log("Error:", error);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
