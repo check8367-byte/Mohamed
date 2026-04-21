@@ -1,17 +1,15 @@
-// بث الإذاعة (رابط البث المباشر الجديد)
 const audio = document.getElementById("audio");
 const musicBtn = document.getElementById("musicBtn");
 const icon = musicBtn.querySelector("span");
 
-// الرابط الجديد اللي طلبته
-const stream = "http://live.mp3quran.net:8006/;stream.mp3";
+// الرابط المحدث (يدعم HTTPS) لضمان العمل على Vercel
+const stream = "https://backup.quran.com.kw/quraan";
 
 let playing = false;
 
-// إعدادات الصوت
 audio.src = stream;
 audio.volume = 0.8;
-audio.preload = "none";
+audio.preload = "metadata"; // تعديل بسيط لسرعة الاستجابة
 
 function playAudio() {
     audio.play()
@@ -21,7 +19,7 @@ function playAudio() {
         musicBtn.classList.add("playing");
     })
     .catch((error) => {
-        console.log("حدث خطأ أو منع التشغيل التلقائي:", error);
+        console.log("فشل التشغيل:", error);
     });
 }
 
@@ -32,7 +30,6 @@ function pauseAudio() {
     musicBtn.classList.remove("playing");
 }
 
-// زر التشغيل والإيقاف
 musicBtn.addEventListener("click", (e) => {
     e.stopPropagation();
     if (playing) {
@@ -42,15 +39,13 @@ musicBtn.addEventListener("click", (e) => {
     }
 });
 
-// التشغيل عند أول تفاعل للمستخدم مع الصفحة
 document.addEventListener("click", () => {
     if (!playing) {
         playAudio();
     }
 }, { once: true });
 
-// التعامل مع أخطاء السيرفر
-audio.addEventListener("error", () => {
-    console.log("خطأ في تحميل البث");
+audio.addEventListener("error", (e) => {
+    console.log("خطأ في البث، جرب تحديث الصفحة");
     pauseAudio();
 });
